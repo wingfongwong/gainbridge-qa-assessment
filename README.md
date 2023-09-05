@@ -5,6 +5,7 @@
 3. When post body is invalid or empty return 400
 4. When deleting nonexistant book or book with reviews returns 403
 5. There exists a put/patch but not specifically mentioned in the assignment.
+6. The Ids are sequential starting at 1
 
 ## Paths to test
 1. GET /books?genre={genre}&author={author}

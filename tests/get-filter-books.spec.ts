@@ -28,32 +28,53 @@ Test cases
 
 5.1 Put/Patch test? - does this exist?
 */
+
+interface Review {
+    reviewId: string;
+    rating: string;
+    comment: string;
+};
+
 interface TestCase {
-    id?: Number;
-    title: string;
+    testId: number;
+    testTitle: string;
+    bookId?: number;
+    bookTitle?: string;
     genre?: string;
     author?: string;
-}
+    reviews?: Review[];
+    expectedStatus: number;
+};
 
 const getBookFilterTestCases : TestCase[] = [
     {   
-        id: 1.1,
-        title: 'No filter' },
-    {
-        id: 1.2,
-        title: 'Null filter',
-        genre: '',
-        author: ''
+        testId: 1.1,
+        testTitle: 'No filter',
+        expectedStatus: 3
     },
     { 
-        id: 1.3,
-        title: 'Valid Genre',
-        genre: 'Fiction'
+        testId: 1.2,
+        testTitle: 'Valid Genre',
+        genre: 'Fiction',
+        expectedStatus: 1
     },
     {
-        id: 1.4,
-        title: 'Valid Author',
-        author: 'Herman Melville'
+        testId: 1.3,
+        testTitle: 'Valid Author',
+        author: 'Herman Melville',
+        expectedStatus: 1
+    },
+    { 
+        testId: 1.2,
+        testTitle: 'Invalid Genre',
+        genre: 'InvalidGenre123',
+        expectedStatus: 0
+    },
+    {
+        testId: 1.3,
+        testTitle: 'Invalid Author',
+        author: 'Manville Hermel',
+        expectedStatus: 0
     }
 ];
 
@@ -62,31 +83,29 @@ test.beforeAll( () => {
 })
 
 for(const testCase of getBookFilterTestCases) {
-test(`${testCase.id} GET /books - ${testCase.title}`, async ({ request }) => {
+test(`${testCase.testId} GET /books - ${testCase.testTitle}`, async ({ request }) => {
     var url : string = '/books';
     url += (testCase.genre||testCase.author)?'?':'';
     url += testCase.genre?`genre=${testCase.genre}`:'';
     url += (testCase.genre||testCase.author)?'&':'';
     url += testCase.author?`author=${testCase.author}`:'';
 
-    console.log(testCase)
-    console.log(`Requested url ${encodeURI(url)}`)
     const response = await request.get(encodeURI(url));
     const responseBody = await response.json();
-    // console.log(responseBody.length);
-    expect(responseBody[0]).toHaveProperty('title', 'Moby Dick');
-    
+    expect(responseBody.length).toBe(testCase.expectedStatus); 
+    if(testCase.expectedStatus > 0) {
+        if(testCase.genre) expect(responseBody[0]).toHaveProperty('genre', testCase.genre);
+        if(testCase.author) expect(responseBody[0]).toHaveProperty('author', testCase.author);
+    }   
 })
 };
 
-test('2.1 Valid ID', async ({ request }) => {
-    const BOOK_ID : Number = 2;
-    const response = await request.get(`/books/${ BOOK_ID }`);
-    const responseBody = await response.json();
-    console.log(responseBody);
-})
-
 //Utility functions
 function setupData(): void {
-    
+    /*
+        setupData for the 5 test cases.
+        1. Valid record with a review
+        2. Valid record without review and author set to Herman Melville.
+        3. Valid record without review and genre set to Fiction.
+    */
 }
