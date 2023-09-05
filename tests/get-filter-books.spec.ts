@@ -43,38 +43,38 @@ interface TestCase {
     genre?: string;
     author?: string;
     reviews?: Review[];
-    expectedStatus: number;
+    expectedCount: number;
 };
 
 const getBookFilterTestCases : TestCase[] = [
     {   
         testId: 1.1,
         testTitle: 'No filter',
-        expectedStatus: 3
+        expectedCount: 3
     },
     { 
         testId: 1.2,
         testTitle: 'Valid Genre',
         genre: 'Fiction',
-        expectedStatus: 1
+        expectedCount: 1
     },
     {
         testId: 1.3,
         testTitle: 'Valid Author',
         author: 'Herman Melville',
-        expectedStatus: 1
+        expectedCount: 1
     },
     { 
         testId: 1.2,
         testTitle: 'Invalid Genre',
         genre: 'InvalidGenre123',
-        expectedStatus: 0
+        expectedCount: 0
     },
     {
         testId: 1.3,
         testTitle: 'Invalid Author',
         author: 'Manville Hermel',
-        expectedStatus: 0
+        expectedCount: 0
     }
 ];
 
@@ -92,10 +92,14 @@ test(`${testCase.testId} GET /books - ${testCase.testTitle}`, async ({ request }
 
     const response = await request.get(encodeURI(url));
     const responseBody = await response.json();
-    expect(responseBody.length).toBe(testCase.expectedStatus); 
-    if(testCase.expectedStatus > 0) {
-        if(testCase.genre) expect(responseBody[0]).toHaveProperty('genre', testCase.genre);
-        if(testCase.author) expect(responseBody[0]).toHaveProperty('author', testCase.author);
+    expect(responseBody.length).toBe(testCase.expectedCount); 
+    if(testCase.expectedCount > 0) {
+        if(testCase.genre) {
+            await expect(responseBody[0]).toHaveProperty('genre');
+        };
+        if(testCase.author) {
+            await expect(responseBody[0]).toHaveProperty('author', testCase.author);
+        };
     }   
 })
 };

@@ -120,10 +120,10 @@ for(const testCase of testCases) {
         }
         const postBook = await request.post('/books', reqData);
         if(testCase.expectedStatus) {
-            expect(postBook.status()).toBe(testCase.expectedStatus);
+            await expect(postBook.status()).toBe(testCase.expectedStatus);
         } else {
-            expect(postBook.status()).toBe(200);
-            expect(await postBook.json()).toHaveProperty('id', testCase.bookId);
+            await expect(postBook.status()).toBe(200);
+            await expect(await postBook.json()).toHaveProperty('id', testCase.bookId);
         }
     });
 }

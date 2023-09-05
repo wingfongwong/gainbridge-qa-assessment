@@ -71,11 +71,11 @@ for(const testCase of testCases) {
         const response = await request.get(encodeURI(url));
         if(!testCase.expectedStatus){
             const responseBody = await response.json();
-            expect(responseBody.genre).toBe(testCase.genre);
-            expect(responseBody.author).toBe(testCase.author);
+            await expect(responseBody.genre).toBe(testCase.genre);
+            await expect(responseBody.author).toBe(testCase.author);
         };
         if(testCase.expectedStatus) {
-            expect(response.status()).toBe(testCase.expectedStatus);
+            await expect(response.status()).toBe(testCase.expectedStatus);
         };
     });
 };

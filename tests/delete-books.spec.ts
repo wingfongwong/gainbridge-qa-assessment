@@ -73,10 +73,10 @@ for(const testCase of testCases) {
         if(!testCase.expectedStatus) {
             const getDeletedBook = await request.get(`/book/${testCase.bookId}`);
             const deletedBookStatus = getDeletedBook.status();
-            expect(deletedBookStatus).toBe(404);
+            await expect(deletedBookStatus).toBe(404);
             testCase.expectedStatus = 204;
         };
-        expect(response.status()).toBe(testCase.expectedStatus);
+        await expect(response.status()).toBe(testCase.expectedStatus);
         
     });   
 };
