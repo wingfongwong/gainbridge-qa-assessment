@@ -1,4 +1,11 @@
 # gainbridge-qa-assessment
+## Test Approach
+A test framework was build around typescript and playwright. The key feature of this test framework is that the tests cases were abstracted from the tests themselves. This allows for a more data driven approach to writing new tests. Given more time I would consolidate the structure of the test cases between tests and extract them out to their own utility class.
+
+As for the test cases, assumptions were made and are listed below. Generally the assupmtion that the database is not seeded and requires some setup prior to the test beginning. The choice of tests were driven by how likely the scenario would be encountered and the severity of the consequences of failure.
+
+These tests themselves are not really suitable for usage in performance testing in their current state as creating a sizable performance data set would result in the test spec to grow to unreasonable sizes with the proportion of data to test code growing excessively large. Ideally the test case data would be extracted from the tests themselves. That would allow the tests to remain small and maintainable while the test data can grow arbitrarily.
+
 ## Assumptions
 1. The database is empty prior to test.
 2. When id is not found it return 404
